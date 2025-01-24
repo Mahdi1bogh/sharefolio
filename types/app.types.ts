@@ -11,7 +11,6 @@ export type User = {
 export type Portfolio = {
   created_at: string
   description: string | null
-  experiences: JSON | null
   id: number
   isAvailable: boolean | null
   languages: string[] | null
@@ -21,4 +20,26 @@ export type Portfolio = {
   skills: string[] | null
   timezone: string | null
   title: string | null
+}
+
+export type Experience = {
+  company_name: string
+  created_at: string | null
+  end_date: string | null
+  id: string
+  is_current: boolean | null
+  job_title: string
+  portfolio_id: number | null
+  start_date: string
+}
+export type Project = {
+  created_at: string
+  description: string | null
+  github_link: string | null
+  id: string
+  img_thumbnail: string
+  portfolio_id: number | null
+  project_link: string | null
+  skills: string[] | null
+  title: string
 }

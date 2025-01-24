@@ -1,36 +1,56 @@
-import { signOutAction } from "@/app/actions";
-import { hasEnvVars } from "@/utils/supabase/check-env-vars";
+import { getUserData, signOutAction } from "@/app/actions";
 import Link from "next/link";
-import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
-import { createClient } from "@/utils/supabase/server";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import Typography from "./ui/typography";
+import { ChevronDown } from "lucide-react";
 
 export default async function AuthButton() {
-  const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!hasEnvVars) {
-    return (
-      <>
-        <div className="flex gap-4 items-center">
-          <div>
-            <Badge
-              variant={"default"}
-              className="font-normal pointer-events-none"
+  const user = await getUserData();
+  return (
+    <>
+      {user ? (
+        <Popover>
+          <PopoverTrigger className="cursor-pointer" asChild>
+            <div className="flex items-center gap-3">
+              <Avatar className="h-8 w-8">
+                <AvatarImage src={user.avatar_url} />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+              <Typography
+                variant="p"
+                text={user.name || user.email.split("@")[0]}
+              />
+              <ChevronDown size={16} />
+            </div>
+          </PopoverTrigger>
+          <PopoverContent className="bg-background w-52">
+            <Link
+              className="pl-4 text-sm py-2 hover:text-primary/85"
+              href="/protected/profile"
             >
-              Please update .env.local file with anon key and url
-            </Badge>
-          </div>
+              Profile
+            </Link>
+            <form action={signOutAction}>
+              <Button
+                variant={"ghost"}
+                type="submit"
+                className=" ring-0 outline-0 border-transparent focus:ring-0 focus:outline-none"
+              >
+                Logout
+              </Button>
+            </form>
+          </PopoverContent>
+        </Popover>
+      ) : (
+        <div className="flex gap-4 items-center">
           <div className="flex gap-2">
             <Button
               asChild
               size="sm"
               variant={"outline"}
-              disabled
-              className="opacity-75 cursor-none pointer-events-none"
+              className="opacity-75"
             >
               <Link href="/sign-in">Sign in</Link>
             </Button>
@@ -38,33 +58,13 @@ export default async function AuthButton() {
               asChild
               size="sm"
               variant={"default"}
-              disabled
-              className="opacity-75 cursor-none pointer-events-none"
+              className="opacity-75"
             >
               <Link href="/sign-up">Sign up</Link>
             </Button>
           </div>
         </div>
-      </>
-    );
-  }
-  return user ? (
-    <div className="flex items-center gap-4">
-      Hey, {user.email}!
-      <form action={signOutAction}>
-        <Button type="submit" variant={"outline"}>
-          Sign out
-        </Button>
-      </form>
-    </div>
-  ) : (
-    <div className="flex gap-2">
-      <Button asChild size="sm" variant={"outline"}>
-        <Link href="/sign-in">Sign in</Link>
-      </Button>
-      <Button asChild size="sm" variant={"default"}>
-        <Link href="/sign-up">Sign up</Link>
-      </Button>
-    </div>
+      )}
+    </>
   );
 }

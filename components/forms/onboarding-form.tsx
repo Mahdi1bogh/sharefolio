@@ -21,6 +21,7 @@ const portfolioSchema = z.object({
   title: z.string().refine((value) => value.length > 0, "Title is required"),
   skills: z.array(z.string()),
   timezone: z.string(),
+  description: z.string(),
 });
 
 export type portfolioSchema = z.infer<typeof portfolioSchema>;
@@ -39,7 +40,10 @@ export default function OnBoardingForm() {
 
   const onSubmit = async (values: portfolioSchema) => {
     setIsSubmitting(true);
-    const error = await createPortfolio(values);
+    const error = await createPortfolio({
+      ...values,
+      description: values.description.trim(),
+    });
     setIsSubmitting(false);
     if (error?.error) {
       console.log(error);
@@ -59,6 +63,19 @@ export default function OnBoardingForm() {
           <Input id="name" {...register("title")} placeholder="Web Developer" />
           {errors.title && (
             <p className="text-red-500">{errors.title.message}</p>
+          )}
+        </div>
+        <div>
+          <label htmlFor="title" className="block text-sm font-medium">
+            About you
+          </label>
+          <Input
+            id="description"
+            {...register("description")}
+            placeholder="I am a passionate Web Developer"
+          />
+          {errors.description && (
+            <p className="text-red-500">{errors.description.message}</p>
           )}
         </div>
 
@@ -204,7 +221,9 @@ export default function OnBoardingForm() {
           )}
         />
 
-        <Button type="submit">Submit</Button>
+        <Button disabled={isSubmitting} type="submit">
+          {isSubmitting ? "Submitting..." : "Submit"}
+        </Button>
       </form>
     </Card>
   );

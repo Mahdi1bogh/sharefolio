@@ -1,6 +1,4 @@
 "use client";
-import Image from "next/image";
-import { ImCancelCircle } from "react-icons/im";
 import { v4 as uuidv4 } from "uuid"; // Use UUID for unique naming
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
@@ -9,11 +7,14 @@ import { toast } from "sonner";
 import { createClient } from "@/utils/supabase/client";
 import { useOnBoarding } from "@/hooks/on-boarding";
 
+import { User } from "@/types/app.types";
+import { useRouter } from "next/navigation";
+
 const supabase = createClient();
 
-const ImageUpload = () => {
-  const { imageUrl, updateImageUrl } = useOnBoarding();
-
+const ImageUpload = ({ userData }: { userData: User }) => {
+  const { updateImageUrl } = useOnBoarding();
+  const router = useRouter();
   const handleImageUpload = async (event: ChangeEvent<HTMLInputElement>) => {
     const avatarFile =
       event.target.files && event.target.files.length > 0
@@ -33,33 +34,25 @@ const ImageUpload = () => {
         cacheControl: "3600",
         upsert: false,
       });
-
+    console.log(data);
     if (error) {
       toast.error("Upload error. Please try again.");
     } else {
       toast.success("Image uploaded successfully");
       updateImageUrl(process.env.NEXT_PUBLIC_BUCKEt_URl + data.path);
+      const { data: userResponse, error } = await supabase
+        .from("users")
+        .update({
+          avatar_url: process.env.NEXT_PUBLIC_BUCKEt_URl + data.path,
+        })
+        .eq("id", userData.id);
+      if (error) {
+        console.log(error);
+        toast.error("update user avatar error. Please try again.");
+      }
+      router.refresh();
     }
   };
-
-  if (imageUrl) {
-    return (
-      <div className="flex items-center justify-center h-32 w-32 relative">
-        <Image
-          src={imageUrl}
-          className="object-cover w-full h-full rounded-md"
-          alt="user profile picture"
-          width={320}
-          height={320}
-        />
-        <ImCancelCircle
-          size={30}
-          onClick={() => updateImageUrl("")}
-          className="absolute cursor-pointer -right-2 -top-2 z-10 hover:scale-110"
-        />
-      </div>
-    );
-  }
 
   return (
     <div className="grid w-full max-w-sm items-center gap-1.5">

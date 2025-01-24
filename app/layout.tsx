@@ -31,7 +31,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={geistSans.className} suppressHydrationWarning>
-      <body className="bg-background text-foreground">
+      <body className="dark:bg-background bg-muted text-foreground">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -57,7 +57,7 @@ export default function RootLayout({
               <div className="w-full h-full">
                 {children}
 
-                <footer className="flex justify-center items-center w-full ">
+                {/* <footer className="flex h-16 justify-center items-center w-full ">
                   <p>
                     Powered by{" "}
                     <a
@@ -70,7 +70,7 @@ export default function RootLayout({
                     </a>
                   </p>
                   <ThemeSwitcher />
-                </footer>
+                </footer> */}
               </div>
             </div>
           </main>

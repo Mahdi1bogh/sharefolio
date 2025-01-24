@@ -1,4 +1,6 @@
 import { getUserData, signOutAction } from "@/app/actions";
+import AuthButton from "@/components/header-auth";
+import { ThemeSwitcher } from "@/components/theme-switcher";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -32,11 +34,11 @@ export default async function Layout({
     return redirect("/sign-in");
   }
   const sidebarLinks: sidebarLinksType[] = [
-    {
-      label: "Dashboard",
-      href: "/dashboard",
-      icon: <LayoutDashboard className="text-zinc-700 dark:text-zinc-300" />,
-    },
+    // {
+    //   label: "Dashboard",
+    //   href: "/dashboard",
+    //   icon: <LayoutDashboard className="text-zinc-700 dark:text-zinc-300" />,
+    // },
     {
       label: "Profile",
       href: "/profile",
@@ -45,8 +47,8 @@ export default async function Layout({
       ),
     },
     {
-      label: "Portfolio",
-      href: "/portfolio",
+      label: "Projects",
+      href: "/projects",
       icon: <BriefcaseBusiness className="text-zinc-700 dark:text-zinc-300" />,
     },
     {
@@ -56,38 +58,18 @@ export default async function Layout({
     },
   ];
   return (
-    <div className="relative h-[calc(100vh-40px)] ">
-      <nav className="h-20 border-b px-10 py-6 fixed top-0 left-0 right-0 z-20">
+    <div className="relative h-screen ">
+      <nav className="h-20 border-b px-10 py-6 bg-background fixed top-0 left-0 right-0 z-20">
         <div className="flex justify-between">
           <div className="h-full flex items-center">
-            <Typography variant="h5" text="Sharefolio" />
+            <Link href="/">
+              <Typography variant="h5" text="Sharefolio" />
+            </Link>
           </div>
-          <Popover>
-            <PopoverTrigger className="cursor-pointer" asChild>
-              <div className="flex items-center gap-3">
-                <Avatar className="h-8 w-8">
-                  <AvatarImage src={userData.avatar_url} />
-                  <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
-                <Typography
-                  variant="p"
-                  text={userData.name || userData.email.split("@")[0]}
-                />
-                <ChevronDown size={16} />
-              </div>
-            </PopoverTrigger>
-            <PopoverContent className="w-52">
-              <form action={signOutAction}>
-                <Button
-                  variant={"ghost"}
-                  type="submit"
-                  className="w-full ring-0 outline-0 border-transparent focus:ring-0 focus:outline-none"
-                >
-                  Logout
-                </Button>
-              </form>
-            </PopoverContent>
-          </Popover>
+          <div className="flex items-center gap-x-2">
+            <ThemeSwitcher />
+            <AuthButton />
+          </div>
         </div>
       </nav>
       <aside className="fixed border-r top-0 w-60 h-full pt-20 z-10">
@@ -95,7 +77,7 @@ export default async function Layout({
           {sidebarLinks.map((link, index) => (
             <li className="w-full" key={index}>
               <Link
-                href={link.href}
+                href={"/protected/" + link.href}
                 className="flex w-full text-sm gap-x-4 text-zinc-800 dark:text-zinc-200 py-4 px-6 opacity-100 transition-all hover:opacity-80 items-center"
               >
                 <span>{link.icon}</span>
@@ -105,7 +87,9 @@ export default async function Layout({
           ))}
         </ul>
       </aside>
-      <main className="h-[calc(100%-80px)] pt-20 ml-60">{children}</main>
+      <main className="h-full dark:bg-transparent bg-muted p-6 mt-20 ml-60">
+        <div className="max-h-full">{children}</div>
+      </main>
     </div>
   );
 }
