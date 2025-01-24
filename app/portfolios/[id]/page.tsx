@@ -131,7 +131,7 @@ export default async function Page({
   return (
     <div className="w-full dark:bg-transparent py-24 px-4 h-screen">
       <nav className="h-20 border-b px-10 py-6 bg-background fixed top-0 left-0 right-0 z-20">
-        <div className="flex justify-between">
+        <div className="flex items-center justify-between">
           <div className="h-full flex items-center">
             <Link href="/">
               <Typography variant="h5" text="Sharefolio" />
