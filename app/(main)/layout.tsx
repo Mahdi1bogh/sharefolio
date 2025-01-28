@@ -37,13 +37,13 @@ export default async function Layout({
             <div className="flex items-center gap-x-2">
               <ThemeSwitcher />
               <NavigationMenuDemo />
-              {/* <Button
+              <Button
                 asChild
                 variant={"ghost"}
                 className="w-fit bg-transparent"
               >
                 <Link href="/jobs">Job postings</Link>
-              </Button> */}
+              </Button>
               {!user ? (
                 <>
                   <Button variant="ghost" asChild>
