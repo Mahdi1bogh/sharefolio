@@ -20,7 +20,7 @@ export default async function Home() {
 
         <div className="w-full p-4 border grid grid-cols-1 md:grid-cols-2 rounded-md gap-4">
           <div className="dark:bg-muted/50 bg-white flex items-center flex-col p-6 space-y-4 border rounded-md">
-            <h1 className="text-3xl text-center dark:text-neutral-200 flex items-center justify-center gap-x-2">
+            <h1 className="text-3xl max-md:flex-col max-md:gap-y-2 text-center dark:text-neutral-200 flex items-center justify-center gap-x-2">
               <span>For Employers</span>{" "}
               <Badge
                 className="bg-yellow-400/30 text-yellow-400 border-yellow-200"

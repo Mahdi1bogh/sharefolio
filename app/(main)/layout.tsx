@@ -22,8 +22,8 @@ export default async function Layout({
 }) {
   const user = await getUserData();
   return (
-    <div>
-      <nav className="backdrop-blur bg-background/50 lg:max-w-[900px] max-w-4xl sm:mx-8 mx-4 lg:mx-auto shadow-sm z-50 m-4 border rounded-xl mb-0 border-muted-accent/40 fixed top-0 left-0 right-0">
+    <div className="max-w-screen overflow-hidden">
+      <nav className="backdrop-blur bg-background/50 lg:max-w-[900px]  sm:mx-8 mx-4 lg:mx-auto shadow-sm z-50 m-4 border rounded-xl mb-0 border-muted-accent/40 fixed top-0 left-0 right-0">
         <div className="flex flex-row justify-between px-4 py-2 z-100">
           <div className="flex items-center space-x-2">
             <Link href="/">
@@ -59,38 +59,44 @@ export default async function Layout({
             </div>
           </div>
           <div className="md:hidden items-center flex gap-1">
-            <Button
-              className="bg-green-500/20 border border-green-600/30 text-green-700 shadow-sm hover:text-primary hover:bg-green-500/30"
-              variant="ghost"
-              asChild
-            >
-              <Link href="/sign-in">Login </Link>
-            </Button>
-
-            <DropdownMenu>
-              <DropdownMenuTrigger>
+            {!user ? (
+              <>
                 <Button
+                  className="bg-green-500/20 border border-green-600/30 text-green-700 shadow-sm hover:text-primary hover:bg-green-500/30"
+                  variant="ghost"
                   asChild
-                  className="px-1"
-                  variant="outline"
-                  size={"icon"}
                 >
-                  <Menu />
+                  <Link href="/sign-in">Login </Link>
                 </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="mt-4 mr-4">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>Profile</DropdownMenuItem>
-                <DropdownMenuItem>Billing</DropdownMenuItem>
-                <DropdownMenuItem>Team</DropdownMenuItem>
-                <DropdownMenuItem>Subscription</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+
+                <DropdownMenu>
+                  <DropdownMenuTrigger>
+                    <Button
+                      asChild
+                      className="px-1"
+                      variant="outline"
+                      size={"icon"}
+                    >
+                      <Menu />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="mt-4 mr-4">
+                    <DropdownMenuItem>
+                      <Link href="/sign-up">Create portfolio</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Link href="/jobs">jobs</Link>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </>
+            ) : (
+              <UserDropDown user={user} />
+            )}
           </div>
         </div>
       </nav>
-      <main className="mt-24 ">
+      <main className="mt-12 lg:mt-24">
         <div className="container py-20 px-4 max-w-4xl md:px-0 w-full">
           {children}
         </div>

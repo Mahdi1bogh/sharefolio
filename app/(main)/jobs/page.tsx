@@ -46,7 +46,7 @@ export default async function Page(props: {
   const jobs = await response.json();
 
   return (
-    <div className="p-6">
+    <div className="lg:p-6">
       <h1 className="text-3xl font-extrabold mb-6 text-center">
         Explore Job Opportunities
       </h1>
